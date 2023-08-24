@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>intersection observer</title>
+    <style media="screen">
+      .target {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.target--intro {
+  flex-direction: column;
+}
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  background-color: #1eeacb;
+  transition: transform 1s ease-in;
+}
+.box--spin.box--visible {
+  transform: rotate(1080deg);
+}
+.box--grow.box--visible {
+  transform: scale(1.5);
+}
+.box--move-right.box--visible {
+  transform: translateX(50px);
+}
+    </style>
+  </head>
+  <body>
+    <div class="target target--intro">
+  <h1>Пример с квадратами</h1>
+  <p>(скролльте вниз)</p>
+</div>
+<div class="target">
+  <div class="box box--spin"><span>Вращение</span></div>
+</div>
+<div class="target">
+  <div class="box box--grow"><span>Увеличение</span></div>
+</div>
+<div class="target">
+  <div class="box box--move-right"><span>Сдвиг вправо</span></div>
+</div>
+  </body>
+  <script type="text/javascript">
+    // функция всего лишь добавляет CSS-класс, который и осуществляет анимацию
+const scrollImations = (entries, observer) => {
+	entries.forEach((entry) => {
+		// анимируем, если элемент целиком попадает в отслеживаемую область
+		if(entry.isIntersecting && entry.intersectionRatio == 1) {
+			entry.target.classList.add('box--visible');
+		} else {
+			entry.target.classList.remove('box--visible');
+		}
+	});
+}
+
+// создаём обсервер с параметрами
+const options = {
+	threshold: 1.0,
+};
+const observer = new IntersectionObserver(scrollImations, options);
+
+const boxes = document.querySelectorAll('.box');
+boxes.forEach((box) => {
+	observer.observe(box);
+});
+  </script>
+</html>
